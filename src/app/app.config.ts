@@ -3,11 +3,13 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {DragulaModule} from "ng2-dragula";
 import {AppService} from "./app.service";
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideZoneChangeDetection({eventCoalescing: true}),
         provideRouter(routes),
+        provideHttpClient(),
         importProvidersFrom(
             DragulaModule.forRoot(),
             AppService
