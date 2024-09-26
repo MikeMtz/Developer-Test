@@ -4,3 +4,54 @@
         In this task we'd like you to show off your creativity and design skills, so bonus points for extra features or out-of-the-box ideas.</p>
     <p class="alert">You do not need a backend to save the data, save to the NotesService only.</p>
 </div>
+
+<div class="notes-container" [class.dark-mode]="darkMode">
+    <h1>Notes</h1>
+
+    <!-- Theme toggle switch -->
+    <div class="theme-toggle">
+        <label>
+            <input type="checkbox" (change)="toggleTheme()" [checked]="darkMode" />
+            {{ darkMode ? 'Dark Mode' : 'Light Mode' }}
+        </label>
+    </div>
+
+    <!-- Input field to add a new note -->
+    <div class="note-input">
+        <textarea class="new-note-textarea" [(ngModel)]="newNote" placeholder="Add a new note..." rows="3"></textarea>
+        <button (click)="addNote()">Add Note</button>
+    </div>
+
+    <!-- Display the list of notes -->
+    <div class="notes-list" *ngIf="notesService.getNotes().length; else noNotes">
+        <h2>Your Notes</h2>
+        <ul>
+            <li *ngFor="let note of notesService.getNotes(); trackBy: trackByCreatedTimestamp" @listAnimation>
+                <!-- Edit mode -->
+                <div *ngIf="note.editMode; else viewMode">
+                    <textarea class="note-textarea" [(ngModel)]="note.content" rows="3"></textarea>
+                    <button (click)="saveEdit(note, note.content)">Save</button>
+                    <button (click)="toggleEditMode(note)">Cancel</button>
+                </div>
+
+                <!-- View mode -->
+                <ng-template #viewMode>
+                    <p>{{ note.content }}</p>
+                    <!-- Show Created -->
+                    <small>Created: {{ note.createdTimestamp | date:'short' }}</small>
+                    <!-- Show Last Updated if applicable -->
+                    <small *ngIf="note.lastUpdatedTimestamp">
+                        Last updated: {{ note.lastUpdatedTimestamp | date:'short' }}
+                    </small>
+                    <button (click)="toggleEditMode(note)">Edit</button>
+                    <button (click)="deleteNoteWithConfirmation(note)">Delete</button>
+                </ng-template>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Fallback if no notes are available -->
+    <ng-template #noNotes>
+        <p>No notes available. Start by adding a new note!</p>
+    </ng-template>
+</div>

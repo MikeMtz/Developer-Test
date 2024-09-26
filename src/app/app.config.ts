@@ -1,9 +1,10 @@
 import {ApplicationConfig, importProvidersFrom, provideZoneChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 import {routes} from './app.routes';
 import {DragulaModule} from "ng2-dragula";
 import {AppService} from "./app.service";
-import { provideHttpClient } from '@angular/common/http';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -12,7 +13,8 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(),
         importProvidersFrom(
             DragulaModule.forRoot(),
-            AppService
+            AppService,
+            BrowserAnimationsModule
         )
     ]
 };
